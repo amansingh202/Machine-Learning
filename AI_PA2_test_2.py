@@ -9,6 +9,7 @@ import csv
 import time
 
 class SudokuSolver:
+
     def __init__(self, puzzle):
         self.puzzle = puzzle
         self.n = len(puzzle)
@@ -99,7 +100,7 @@ class SudokuSolver:
                 domain.discard(self.puzzle[i + start_row][j + start_col])
         return domain
 
-    def print_solution(self):
+    def print_solution(self, filename):
         print("Last Name, First Name, AXXXXXXXX solution:")
         print("Input file:", sys.argv[2])
         if sys.argv[1] == '1':
@@ -109,13 +110,24 @@ class SudokuSolver:
         elif sys.argv[1] == '3':
             print("Algorithm: Forward Checking with MRV Heuristics")
         print("\nInput puzzle:")
-        for row in self.puzzle:
-            print(" ".join(row))
+        
+        data = load_puzzle(filename)
+        
+        formatted_data = []
+        for set_index, puzzle_set in enumerate(data, start=1):
+            if set_index == 1:
+                
+                for puzzle in puzzle_set:
+                    formatted_data.append(" ".join(puzzle))
+                formatted_data.append("")
+
+        print("\n".join(formatted_data))
+        
         print("\nNumber of search tree nodes generated:", self.total_nodes)
         print("Search time:", round(time.time() - self.start_time, 2), "seconds\n")
         print("Solved puzzle:")
         for row in self.puzzle:
-            print(' '.join(str(cell) for cell in row))
+            print(' '.join(str(cell) if cell != 'X' else 'X' for cell in row))
         print("\nSaving solution to", sys.argv[2].split('.')[0] + "_SOLUTION.csv...")
         with open(sys.argv[2].split('.')[0] + "_SOLUTION.csv", 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
@@ -151,9 +163,14 @@ class SudokuSolver:
         print("This is a valid, solved, Sudoku puzzle.")
 
 def load_puzzle(filename):
+    puzzle = []
     with open(filename, 'r') as file:
-        puzzle = list(csv.reader(file))
-    return puzzle
+        reader = csv.reader(file)
+        for row in reader:
+            puzzle.append(row)
+    return puzzle, puzzle
+
+
 
 def main():
     if len(sys.argv) != 3:
@@ -165,16 +182,16 @@ def main():
         print("ERROR: Illegal mode input. Mode should be 1, 2, 3, or 4.")
         sys.exit()
     try:
-        puzzle = load_puzzle(filename)
+        puzzle, raw_data = load_puzzle(filename)
     except FileNotFoundError:
         print("ERROR: File not found.")
         sys.exit()
-
+    
     solver = SudokuSolver(puzzle)
 
     if mode == '1':
         solver.solve_brute_force()
-        solver.print_solution()
+        solver.print_solution(filename)
     elif mode == '2':
         solver.solve_backtracking()
         solver.print_solution()
