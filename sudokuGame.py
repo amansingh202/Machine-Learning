@@ -4,13 +4,14 @@ class SudokuSolver:
     def __init__(self, puzzle):
         self.puzzle = puzzle
         self.n = len(puzzle)
-        self.start_time = None
+        self.sqrt_n = int(self.n ** 0.5)
         self.total_nodes = 0
+        self.start_time = None
 
     def find_empty_cell(self):
         for i in range(self.n):
             for j in range(self.n):
-                if self.puzzle[i][j] == 'X':
+                if self.puzzle[i][j] == 0:
                     return i, j
         return None, None
 
@@ -34,13 +35,7 @@ class SudokuSolver:
         return False
 
     def solve_brute_force(self):
-        self.start_time = time.time()
-        if self._solve_brute_force():
-            return True
-        else:
-            return False
-
-    def _solve_brute_force(self):
+        self.start_time = time.time()  # Start timing
         row, col = self.find_empty_cell()
         if row is None:
             return True  # Puzzle solved
@@ -48,33 +43,34 @@ class SudokuSolver:
             if self.is_valid(row, col, num):
                 self.puzzle[row][col] = num
                 self.total_nodes += 1
-                if self._solve_brute_force():
+                if self.solve_brute_force():
                     return True  # Solution found
-                self.puzzle[row][col] = 'X'  # Undo the placement
+                self.puzzle[row][col] = 0  # Undo the placement
         return False  # No solution found
 
     def print_solution(self):
-        print("Sudoku puzzle solved successfully in {:.6f} seconds:".format(time.time() - self.start_time))
         for row in self.puzzle:
             print(row)
 
-
 # Example usage:
 puzzle = [
-    ['5', '3', 'X', 'X', '7', 'X', 'X', 'X', 'X'],
-    ['6', 'X', 'X', '1', '9', '5', 'X', 'X', 'X'],
-    ['X', '9', '8', 'X', 'X', 'X', 'X', '6', 'X'],
-    ['8', 'X', 'X', 'X', '6', 'X', 'X', 'X', '3'],
-    ['4', 'X', 'X', '8', 'X', '3', 'X', 'X', '1'],
-    ['7', 'X', 'X', 'X', '2', 'X', 'X', 'X', '6'],
-    ['X', '6', 'X', 'X', 'X', 'X', '2', '8', 'X'],
-    ['X', 'X', 'X', '4', '1', '9', 'X', 'X', '5'],
-    ['X', 'X', 'X', 'X', '8', 'X', 'X', '7', '9']
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ]
 
 solver = SudokuSolver(puzzle)
+start_time = time.time()
 if solver.solve_brute_force():
+    print("Sudoku puzzle solved successfully:")
     solver.print_solution()
     print("Total nodes visited:", solver.total_nodes)
+    print("Time taken:", round(time.time() - start_time, 6), "seconds")
 else:
     print("No solution exists for the given puzzle.")
