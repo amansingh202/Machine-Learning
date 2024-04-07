@@ -73,59 +73,61 @@ class SudokuSolver:
                     return True
         return False
 
-    def solve_brute_force(self, count):
-        # #self.start_time = time.time()
-        # row, col = self.find_empty_cell()
-        # if row == -1 and col == -1:
-        #     return True  # Puzzle solved
+    # def solve_brute_force(self, count):
+    #     # #self.start_time = time.time()
+    #     # row, col = self.find_empty_cell()
+    #     # if row == -1 and col == -1:
+    #     #     return True  # Puzzle solved
 
-        # for num in range(1, self.n + 1):
-        #     if self.is_valid(row, col, str(num)):
-        #         self.puzzle[row][col] = str(num)
-        #         self.total_nodes += 1
-        #         if self.solve_brute_force():
-        #             return True  # Solution found
-        #         self.puzzle[row][col] = 'X'  # Undo the placement
-        # return False 
-        # print()
-        # print("Step")
-        # print_sudoku(board)
+    #     # for num in range(1, self.n + 1):
+    #     #     if self.is_valid(row, col, str(num)):
+    #     #         self.puzzle[row][col] = str(num)
+    #     #         self.total_nodes += 1
+    #     #         if self.solve_brute_force():
+    #     #             return True  # Solution found
+    #     #         self.puzzle[row][col] = 'X'  # Undo the placement
+    #     # return False 
+    #     # print()
+    #     # print("Step")
+    #     # print_sudoku(board)
 
-        empty_location = self.find_empty_cell()
-        # print(empty_location)
-        # count[0] = count[0] + 1
-        # If there is no empty location, the sudoku is solved
-        # if count[0]%1000000==0:
-        #     print_sudoku(board)
-        #     print(count[0])
-        count[0] = count[0] + 1
-        if not empty_location:
+    #     empty_location = self.find_empty_cell()
+    #     # print(empty_location)
+    #     # count[0] = count[0] + 1
+    #     # If there is no empty location, the sudoku is solved
+    #     # if count[0]%1000000==0:
+    #     #     print_sudoku(board)
+    #     #     print(count[0])
+    #     count[0] = count[0] + 1
+    #     if not empty_location:
 
-            if self.is_sudoku_solved():
-                print("solved")
-                return True
-            else:
-                # print("not solved")
-                return False
+    #         if self.is_sudoku_solved():
+    #             print("solved")
+    #             return True
+    #         else:
+    #             # print("not solved")
+    #             return False
 
-        row, col = empty_location
+    #     row, col = empty_location
 
-        # Try placing numbers from 1 to 9
-        for num in range(1, 10):
-            # if is_valid(board, row, col, num):
-                # Place the number if it's valid
-            self.puzzle[row][col] = num
+    #     # Try placing numbers from 1 to 9
+    #     for num in range(1, 10):
+    #         # if is_valid(board, row, col, num):
+    #             # Place the number if it's valid
+    #         self.puzzle[row][col] = num
 
-                # Recursively try to solve the remaining board
-            if self.solve_brute_force(count):
-                # print("in if")
-                return True
+    #             # Recursively try to solve the remaining board
+    #         if self.solve_brute_force(count):
+    #             # print("in if")
+    #             return True
 
 
-                # If placing the number leads to an invalid solution, backtrack
-            self.puzzle[row][col] = 'X'
+    #             # If placing the number leads to an invalid solution, backtrack
+    #         self.puzzle[row][col] = 'X'
 
-        return False
+    #     return False
+
+    
 
 
     
