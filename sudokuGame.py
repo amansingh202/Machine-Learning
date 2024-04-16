@@ -126,8 +126,69 @@ class SudokuSolver:
     #         self.puzzle[row][col] = 'X'
 
     #     return False
+    def is_sudoku_solved(self):
+    # Check if each row contains all nums
+        all_nums = set(range(1, self.n + 1))  # Generate set of integers from 1 to 9
+        for row in self.puzzle:
+            row_set = set(row)  # Convert row to set to remove duplicates
+            if row_set != all_nums:
+                return False
 
-    
+        # Check if each column contains all nums
+        for col in range(self.n):
+            col_set = set(self.puzzle[row][col] for row in range(self.n))  # Extract elements from each row in the column
+            if col_set != all_nums:
+                return False
+
+        # Check if each 3x3 subgrid contains all nums
+        for row in range(0, self.n, 3):
+            for col in range(0, self.n, 3):
+                subgrid_set = set(self.puzzle[i][j] for i in range(row, row + 3) for j in range(col, col + 3))  # Extract elements from subgrid
+                if subgrid_set != all_nums:
+                    return False
+
+        return True
+
+    def solve_sudoku_bruteforce(self,count):
+    # print()
+    # print("Step")
+    # print_sudoku(board)
+
+        empty_location = self.find_empty_cell()
+        # print(empty_location)
+        # count[0] = count[0] + 1
+        # If there is no empty location, the sudoku is solved
+        # if count[0]%1000000==0:
+        #     print_sudoku(board)
+        #     print(count[0])
+        count[0] = count[0] + 1
+        if not empty_location:
+
+            if self.is_sudoku_solved():
+                print("solved")
+                return True
+            else:
+                # print("not solved")
+                return False
+
+        row, col = empty_location
+
+        # Try placing numbers from 1 to 9
+        for num in range(1, 10):
+            # if is_valid(board, row, col, num):
+                # Place the number if it's valid
+            self.puzzle[row][col] = num
+
+                # Recursively try to solve the remaining board
+            if self.solve_sudoku_bruteforce(count):
+                # print("in if")
+                return True
+
+
+                # If placing the number leads to an invalid solution, backtrack
+            self.puzzle[row][col] = 'X'
+
+        return False
 
 
     
@@ -277,7 +338,7 @@ def main():
     solver = SudokuSolver(puzzle)
     count = [0]
     if mode == '1':
-        solver.solve_brute_force(count)
+        solver.solve_sudoku_bruteforce(count)
         solver.print_solution(filename)
     elif mode == '2':
         solver.solve_backtracking()

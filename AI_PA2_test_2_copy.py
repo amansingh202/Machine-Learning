@@ -50,7 +50,7 @@ class SudokuSolver:
         if row is None:
             return True  # Puzzle solved
         for num in range(1, self.n + 1):
-            if self.is_valid(row, col, num):
+            if self.is_valid(row, col, str(num)):
                 self.puzzle[row][col] = str(num)
                 self.total_nodes += 1
                 if self.solve_brute_force():
